@@ -5,6 +5,8 @@ import SwiftUI
 //TODO: Create the navigation
 struct ContentView: View {
     @EnvironmentObject var fruitStore:FruitStore
+    @State private var showSheet = false
+    @State private var fruitToAdd = FruitStore.defaultFruit
     var body: some View {
         NavigationView {
             List(FruitStore.loadFruits()) { fruit in
@@ -13,6 +15,16 @@ struct ContentView: View {
                         FruitRowView(fruit: fruit)
                     }
                 }.navigationBarTitle(Text("Fruits"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button("+") {showSheet = true}
+                        .sheet(isPresented: $showSheet, onDismiss: {})
+                        {
+                            AddFruitView(sheetIsVisible: $showSheet, newFruit: $fruitToAdd)
+                        }
+                }
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 class FruitStore:ObservableObject{
     
-    @Published var fruits = loadFruits()
+    @Published private(set) var fruits = loadFruits()
     
     static func loadFruits()->[Fruit]{
         return FruitStore.defaultFruits
@@ -14,5 +14,12 @@ class FruitStore:ObservableObject{
     ]
     
     static let defaultFruit =  Fruit(name: "Watermelon", emoji: .watermelon, description: "Watermelon helps control your heart rate")
+    
+    func addFruit(fruit:Fruit){
+        if (!fruits.contains(fruit))
+        {
+            fruits.append(fruit)
+        }
+    }
     
 }
