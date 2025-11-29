@@ -5,6 +5,12 @@ struct Fruit: Hashable, Identifiable{
     var name:String
     var emoji:EmojiFruit
     var description:String
+    
+}
+
+enum SheetAction {
+    case cancel
+    case add
 }
 
 enum EmojiFruit:String, CaseIterable {

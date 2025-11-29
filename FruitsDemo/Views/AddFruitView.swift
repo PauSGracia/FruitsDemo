@@ -4,6 +4,7 @@ import SwiftUI
 struct AddFruitView: View {
     
     @Binding var sheetIsVisible:Bool
+    @Binding var sheetAction: SheetAction
     @Binding var newFruit:Fruit
     
     var body: some View {
@@ -25,11 +26,14 @@ struct AddFruitView: View {
                 ToolbarItem(placement: .navigationBarLeading){
                     Button("Cancel") {
                         sheetIsVisible = false
+                        print("Cancel")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing){
                     Button("Add") {
+                        sheetAction = SheetAction.add
                         sheetIsVisible = false
+                        print("Add")
                     }
                 }
             }
@@ -39,10 +43,10 @@ struct AddFruitView: View {
 
 struct AddFruitView_Previews: PreviewProvider {
     static var previews: some View {
-        AddFruitView(sheetIsVisible: .constant(false), newFruit: .constant(FruitStore.defaultFruit))
-        AddFruitView(sheetIsVisible: .constant(false), newFruit: .constant(FruitStore.defaultFruit))
+        AddFruitView(sheetIsVisible: .constant(false), sheetAction: .constant(SheetAction.cancel), newFruit: .constant(FruitStore.defaultFruit))
+        AddFruitView(sheetIsVisible: .constant(false), sheetAction: .constant(SheetAction.cancel), newFruit: .constant(FruitStore.defaultFruit))
             .preferredColorScheme(.dark)
-        AddFruitView(sheetIsVisible: .constant(false), newFruit: .constant(FruitStore.defaultFruit))
+        AddFruitView(sheetIsVisible: .constant(false),sheetAction: .constant(SheetAction.cancel), newFruit: .constant(FruitStore.defaultFruit))
             .previewLayout(.fixed(width: 480, height: 320))
     }
 }

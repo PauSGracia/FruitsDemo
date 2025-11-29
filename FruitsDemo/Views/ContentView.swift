@@ -6,6 +6,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var fruitStore:FruitStore
     @State private var showSheet = false
+    @State private var sheetAction = SheetAction.cancel
     @State private var fruitToAdd = FruitStore.defaultFruit
     var body: some View {
         NavigationView {
@@ -19,12 +20,22 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing){
                     Button("+") {showSheet = true}
-                        .sheet(isPresented: $showSheet, onDismiss: {})
+                        .sheet(isPresented: $showSheet, onDismiss: {onSheetDismiss(fruit: fruitToAdd)})
                         {
-                            AddFruitView(sheetIsVisible: $showSheet, newFruit: $fruitToAdd)
+                            AddFruitView(sheetIsVisible: $showSheet, sheetAction: $sheetAction, newFruit: $fruitToAdd)
                         }
                 }
             }
+        }
+    }
+    func onSheetDismiss(fruit: Fruit){
+        print("aksnd")
+        if (sheetAction == SheetAction.add){
+            print("hola")
+            fruitStore.addFruit(fruit: fruit)
+            
+            self.fruitToAdd = FruitStore.defaultFruit
+            self.sheetAction = SheetAction.cancel
         }
     }
 }
