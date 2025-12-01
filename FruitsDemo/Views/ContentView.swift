@@ -7,15 +7,21 @@ struct ContentView: View {
     @EnvironmentObject var fruitStore:FruitStore
     @State private var showSheet = false
     @State private var sheetAction = SheetAction.cancel
-    @State private var fruitToAdd = FruitStore.defaultFruit
+    @State private var fruitToAdd = FruitStore.emptyFruit
+    @State private var alertIsVisible = false
+    
     var body: some View {
         NavigationView {
-            List(FruitStore.loadFruits()) { fruit in
-                NavigationLink(
-                    destination: DetailFruitView(fruit: fruit)) {
-                        FruitRowView(fruit: fruit)
-                    }
-                }.navigationBarTitle(Text("Fruits"))
+            List() {
+                ForEach(fruitStore.fruits, id: \.id) {
+                    fruit in
+                    NavigationLink(
+                        destination: DetailFruitView(fruit: fruit)) {
+                            FruitRowView(fruit: fruit)
+                        }
+                }.onDelete(perform: fruitStore.deleteFruit)
+                }
+            .navigationBarTitle(Text("Fruits"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing){
@@ -26,15 +32,18 @@ struct ContentView: View {
                         }
                 }
             }
+        }.alert(isPresented: $alertIsVisible) {
+            Alert(title: Text("ERROR"),
+            message: Text("Error adding fruit. Name incomplete or fruit already exists"),
+            dismissButton: .default(Text("Accept")))
         }
     }
+    
     func onSheetDismiss(fruit: Fruit){
-        print("aksnd")
         if (sheetAction == SheetAction.add){
-            print("hola")
-            fruitStore.addFruit(fruit: fruit)
+            alertIsVisible = !fruitStore.addFruit(fruit: fruit)
             
-            self.fruitToAdd = FruitStore.defaultFruit
+            self.fruitToAdd = FruitStore.emptyFruit
             self.sheetAction = SheetAction.cancel
         }
     }
@@ -42,6 +51,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environmentObject(FruitStore())
     }
 }

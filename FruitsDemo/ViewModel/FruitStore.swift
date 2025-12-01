@@ -15,11 +15,19 @@ class FruitStore:ObservableObject{
     
     static let defaultFruit =  Fruit(name: "Watermelon", emoji: .watermelon, description: "Watermelon helps control your heart rate")
     
-    func addFruit(fruit:Fruit){
-        if (!fruits.contains(fruit))
+    static let emptyFruit = Fruit(name: "", emoji: .apple, description: "")
+    
+    func addFruit(fruit:Fruit) -> Bool{
+        if (!fruits.contains(fruit) && !fruit.name.isEmpty)
         {
             fruits.append(fruit)
+            return true
         }
+        return false
+    }
+    
+    func deleteFruit(at offsets:IndexSet) {
+        fruits.remove(atOffsets: offsets)
     }
     
 }
